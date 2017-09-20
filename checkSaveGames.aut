@@ -1,0 +1,160 @@
+<?PHP
+/**
+ * directory dl response
+ */
+
+require_once('include_openpaedia.aut');
+
+error_reporting(E_ALL ^ E_NOTICE);
+
+/* Save game locations */
+$basedir  = 'C:/Users/brett/Downloads/oxcp/Dioxine_XPiratez_099H1/Dioxine_XPiratez/user/';
+$xcom     = 'piratez';
+$geo      = $basedir.$xcom.'/'.'_autogeo_.asav';
+$battle   = $basedir.$xcom.'/'.'_autobattle_.asav';
+
+$CLI = new CLI("Monitoring Save Games", 80, 16);
+
+/* Check for missing files */
+if (!is_file($geo))
+{
+    $CLI->clerr('File DNE: '.$geo);
+    exit();
+}
+else if (!is_file($battle))
+{
+    $CLI->clerr('File DNE: '.$battle);
+    exit();
+}
+
+$CLI->cls();
+
+
+$geoTime    = filemtime($geo);
+$battleTime = filemtime($battle);
+
+$factions = array('Gals', 'Scallywags', 'LandLubbers');
+$i = 0;
+do
+{
+    clearstatcache();
+    $geoNow    = filemtime($geo);
+    $battleNow = filemtime($battle);
+    $kills      = array();
+    $stuns      = array();
+    $counts     = array();
+
+    if ($geoNow > $battleNow)
+    {
+        if ($geoNow <= $geoTime)
+        {
+            sleep(1);
+            continue;
+        }
+        $geoTime = $geoNow;
+        $CLI->cls();
+
+        //$CLI->clmulti("Geoscape Active", false);
+    }
+    else 
+    {
+        if ($battleNow <= $battleTime)
+        {
+            sleep(1);
+            continue;            
+        }
+        $battleTime = $battleNow;
+        
+        $save = new YAML($battle);
+
+        foreach($save->YAMLArray['battleGame']['units'] AS $unit)
+        {
+            /** initialize arrays **/
+            if (!isset($kills[$unit['faction']]))
+            {
+                $kills[$unit['faction']] = 0;
+                $stuns[$unit['faction']] = 0;
+                $counts[$unit['faction']] = 0;
+            }
+
+
+            /** Check for deaths / stuns / remaining **/
+            if ($unit['health'] <= 0)
+            {                
+                $kills[$unit['faction']]++;
+            }
+            else if ($unit['stunlevel'] >= $unit['health'])
+            {
+                $stuns[$unit['faction']]++;
+            }
+            else
+            {
+                $counts[$unit['faction']]++;
+            }
+        }
+
+        $cheatMode = '';
+        if ($save->YAMLArray['turn'] >= 20 || ($counts[1] < 3 && $save->YAMLArray['turn'] >= 10))
+        {
+            $cheatMode = " - ALIEN CHEAT MODE ACTIVATED";
+        }
+
+        
+        
+        $output = array(
+            'Battlescape Statistics',
+            '',
+            'Turn: '.$save->YAMLArray['turn'].$cheatMode,
+            '');
+
+        $deaths = false;
+        for ($i = 0; $i < count($kills); $i++)
+        {
+            $default = '  '.$factions[$i].': '; 
+            $string  = $default;
+
+            if ($kills[$i] > 0)
+            {
+                $string .= ': '.$kills[$i];
+            }
+            if ($stuns[$i] > 0)
+            {
+                $string .=' ('.$stuns[$i].')';
+            }
+            
+            if ($string != $default)
+            {
+                if ($deaths == false)
+                {
+                    $deaths = true;
+                    $output[] = 'Deaths';
+
+                }
+                $output[] = $string;
+            }
+        }
+
+        $CLI->clout($output, false,79);
+            
+        unset($save);
+        //$CLI->viewArray($save->YAMLArray);
+        //exit();
+    }
+    sleep(1);
+    $i++;
+} while ($i < 100000);
+$lines = array(
+    'This is a pretty short line',
+    'This line is slightly longer because it has more characters (i suck at lorem)',    
+    "This \nline is really long, but I an not going to type, I am just going to hit the keyboard... LJK gkjg gyu g uyguyg G jk GJHG jh gljg ljgLJg lgJLG ljgjlgLK Gljgljgljg lgLKJgkglkg lHGL KgglhG jh",
+    "This line has newline characters\nAnd because of that\nWill span multiple lines without being too long",
+    'This is a pretty short line',
+);
+
+foreach($lines as $line) {
+    $CLI->clmulti($line, false);
+    sleep(2);
+}
+
+exit();
+?>
