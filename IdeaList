@@ -1,0 +1,10 @@
+Armor manufacturing tool
+  To allow for reading of the manufacturing projects from PirateZ.rul and creating streamlined manufacturing projects.
+  ingest the recipes.
+  Find where one recipe requires another.
+  substitute components of subordinate item into the list.
+  add up totals of identical items
+  add time totals
+  add cost totals.
+  
+  Report new recipes in .rul format for Streamlined Manufacturing Mod.
