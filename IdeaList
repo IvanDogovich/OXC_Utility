@@ -8,3 +8,38 @@ Armor manufacturing tool
   add cost totals.
   
   Report new recipes in .rul format for Streamlined Manufacturing Mod.
+
+
+
+### more Pseudocode:
+Load yaml files
+	Write out manufacturing file.
+
+Get recipes
+Screen for only trappings
+
+Compare recipes
+Does this recipe contain another distinct recipe from trappings?
+If so
+	Get elements from each
+		Time
+		Cost
+		Components
+	Add together
+		Time
+		Cost
+		Components
+			Where the same, add for new total
+Return new recipe
+	With updated recipe name
+	
+Do for all recipes
+
+
+
+####
+
+File read module:
+Configure a config file in the location from where the python script will be launched to specify the directories
+	This should allow skipping a bunch of Stoddard's heuristics for directorys in his 
+	Modloader.py at minicom in git hub
