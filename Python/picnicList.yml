@@ -1,0 +1,14 @@
+Food:
+  Sandwich:
+    meat:1
+    bread:2
+  Apple Pie:
+    Apple: 2
+    Dough: 1
+  Wine:
+    Bottle: 1
+  Picnic:
+    Sandwich: 3
+    Apple Pie: 1
+    Oranges: 2
+    Wine: 1
