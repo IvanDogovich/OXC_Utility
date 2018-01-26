@@ -1,6 +1,13 @@
 #Given a save file on the battlescape, generates a PNG map showing live + dead units, colour coded.
+#Author:grrussel
 
-F#un parsing YAML! (slow on big save files)
+# More comments:
+#This is a python script, indeed. It needs the pyaml and PIL libraries installed, too.
+#It loads a battlescape save game (change the path in the script, not elegant but meh) 
+# and makes a map of unit positions - showing red (xcom), white (dead), and blue (alien) as a png image.
+
+
+#Fun parsing YAML! (slow on big save files)
 
 
 def load():
